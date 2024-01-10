@@ -1,0 +1,41 @@
+#Script para nmap , buscara que puertos de una ip determinada estan abiertos.
+
+#!/bin/bash
+
+ip="192.168.1."  # Cambia esto por la base de tu rango de direcciones IP
+
+for i in {1..255}; do
+  target_ip="$ip$i"
+  echo "Escaneando puertos en $target_ip"
+  
+  # Ejecutar el escaneo de Nmap y redirigir la salida a una variable
+  result=$(nmap -p 1-1000 --open -T4 "$target_ip" | grep -iE '^[0-9]+/open')
+
+  # Verificar si la variable result contiene la cadena '/open'
+  if [[ $result == *"/open"* ]]; then
+    echo "Puertos abiertos encontrados en $target_ip"
+  else
+    echo "No se encontraron puertos abiertos en $target_ip"
+  fi
+done
+
+# ----------------------- Explicacion  ---------------------------------------
+
+# 1 Ejecutar Nmap y redirigir la salida a una variable:
+result=$(nmap -p 1-1000 --open -T4 "$target_ip" | grep -iE '^[0-9]+/open')
+
+
+# `$(...)` : Esto ejecuta el comando dentro de los paréntesis y asigna la salida a la variable result.
+# `nmap -p 1-1000 --open -T4 "$target_ip"` : Ejecuta Nmap con la opción `-p` para especificar el rango de puertos, `--open` para mostrar solo puertos abiertos, y `-T4` para establecer un nivel de velocidad/agresividad.
+# `| grep -iE '^[0-9]+/open'` : Utiliza `grep` para buscar líneas que coincidan con el patrón de puertos abiertos. La expresión regular '^[0-9]+/open' busca líneas que comiencen con números, seguidos por '/open'. El modificador `-i` hace que la búsqueda sea insensible a mayúsculas y minúsculas.
+
+# 2 Verificar si la variable `result` contiene la cadena '/open':
+if [[ $result == *"/open"* ]]; then
+# [[ ... ]]: Esta es una construcción de comparación en Bash. Aquí se está utilizando para comparar si la variable result contiene la cadena '/open'.
+# $result == *"/open"*: Esto compara si la variable result contiene la cadena '/open'. El asterisco (*) se utiliza para indicar cualquier cantidad de caracteres antes o después de '/open'.
+
+# Imprimir mensajes según el resultado:
+Imprimir mensajes según el resultado:
+# Imprime un mensaje indicando que se encontraron puertos abiertos en la dirección IP actual.
+echo "No se encontraron puertos abiertos en $target_ip"
+# Imprime un mensaje indicando que no se encontraron puertos abiertos en la dirección IP actual.
